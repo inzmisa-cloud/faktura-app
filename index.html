@@ -121,8 +121,8 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .items-scroll > * { min-width: 520px; }
+  .items-scroll { overflow: auto; -webkit-overflow-scrolling: touch; }
+  .items-scroll .item-row { grid-template-columns: 150px 75px 80px 70px 55px; }
   #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
