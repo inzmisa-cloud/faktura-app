@@ -34,11 +34,15 @@ body {
 /* Items table */
 .items-section { margin: 16px 0; }
 .items-scroll { overflow: visible; }
-.items-section .item-row { display: grid; grid-template-columns: 1fr 70px 80px 80px 60px; gap: 4px; align-items: center; margin-bottom: 4px; }
-.items-section .item-row.header { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; white-space: nowrap; }
-.items-section .item-row input { padding: 5px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
-.items-section .item-row .btn-remove { background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-.items-section .item-row .btn-remove:hover { background: #fecaca; }
+.items-table { width: 100%; border-collapse: collapse; }
+.items-table th { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; white-space: nowrap; text-align: left; padding: 4px 6px; }
+.items-table th:not(:first-child) { text-align: right; }
+.items-table td { padding: 3px 4px; }
+.items-table td input { width: 100%; padding: 5px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; box-sizing: border-box; }
+.items-table td input:focus { outline: none; border-color: #2563eb; }
+.items-table .item-total { display: block; text-align: right; font-size: 12px; padding: 5px 4px; }
+.items-table .btn-remove { background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+.items-table .btn-remove:hover { background: #fecaca; }
 .btn-add-item { background: #eef2ff; color: #4f46e5; border: 1px dashed #c7d2fe; border-radius: 6px; padding: 6px; font-size: 12px; cursor: pointer; width: 100%; margin-top: 4px; }
 .btn-add-item:hover { background: #e0e7ff; }
 .totals { text-align: right; margin-top: 8px; font-size: 13px; }
@@ -121,8 +125,8 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-scroll { overflow: auto; -webkit-overflow-scrolling: touch; }
-  .items-scroll .item-row { grid-template-columns: 150px 75px 80px 70px 55px; }
+  .items-scroll { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  .items-table { width: 100%; min-width: 480px; table-layout: fixed; }
   #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
@@ -252,14 +256,18 @@ body {
     <div class="form-section items-section" id="items-section">
       <h3>Stavke</h3>
       <div class="items-scroll">
-        <div class="item-row header">
-          <span>Opis</span>
-          <span>Količ.</span>
-          <span>Cena</span>
-          <span>Ukupno</span>
-          <span></span>
-        </div>
-        <div id="items-container"></div>
+        <table class="items-table" id="items-table">
+          <thead>
+            <tr class="item-row header">
+              <th style="width:40%">Opis</th>
+              <th style="width:18%">Količ.</th>
+              <th style="width:18%">Cena</th>
+              <th style="width:18%">Ukupno</th>
+              <th style="width:6%"></th>
+            </tr>
+          </thead>
+          <tbody id="items-container"></tbody>
+        </table>
       </div>
       <button class="btn-add-item" onclick="addItem()">+ Dodaj stavku</button>
       <div class="totals">
@@ -304,22 +312,22 @@ function setDefaults() {
 function addItem(desc, qty, price) {
   const container = document.getElementById('items-container');
   const id = ++itemIdCounter;
-  const div = document.createElement('div');
-  div.className = 'item-row';
-  div.dataset.id = id;
-  div.innerHTML = `
-    <input type="text" class="item-desc" placeholder="Opis stavke..." value="${desc || ''}">
-    <input type="number" class="item-qty" value="${qty || 1}" min="0" step="0.01" oninput="updatePreview()">
-    <input type="number" class="item-price" value="${price || 0}" min="0" step="0.01" oninput="updatePreview()">
-    <span class="item-total" style="font-size:12px;text-align:right;padding-right:4px;">0,00</span>
-    <button class="btn-remove" onclick="removeItem(this)">✕</button>
+  const tr = document.createElement('tr');
+  tr.className = 'item-row';
+  tr.dataset.id = id;
+  tr.innerHTML = `
+    <td><input type="text" class="item-desc" placeholder="Opis stavke..." value="${desc || ''}"></td>
+    <td><input type="number" class="item-qty" value="${qty || 1}" min="0" step="0.01" oninput="updatePreview()"></td>
+    <td><input type="number" class="item-price" value="${price || 0}" min="0" step="0.01" oninput="updatePreview()"></td>
+    <td><span class="item-total">0,00</span></td>
+    <td><button class="btn-remove" onclick="removeItem(this)">✕</button></td>
   `;
-  container.appendChild(div);
+  container.appendChild(tr);
   updatePreview();
 }
 
 function removeItem(btn) {
-  btn.closest('.item-row').remove();
+  btn.closest('tr').remove();
   updatePreview();
 }
 
