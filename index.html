@@ -129,16 +129,16 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
-  .items-scroll::-webkit-scrollbar { height: 3px; }
-  .items-scroll::-webkit-scrollbar-track { background: #eee; border-radius: 2px; }
-  .items-scroll::-webkit-scrollbar-thumb { background: #bbb; border-radius: 2px; }
-  .items-table { width: 100%; min-width: 500px; table-layout: fixed; }
-  .items-table th:nth-child(1) { width: 45%; }
-  .items-table th:nth-child(2) { width: 15%; }
-  .items-table th:nth-child(3) { width: 18%; }
-  .items-table th:nth-child(4) { width: 18%; }
-  .items-table th:nth-child(5) { width: 4%; }
+  .items-scroll { overflow: visible; }
+  .items-table { width: 100%; min-width: unset; table-layout: auto; }
+  .items-table thead { display: none; }
+  .items-table tbody, .items-table tr, .items-table td { display: block; }
+  .items-table tr { background: #f9fafb; border-radius: 8px; padding: 10px; margin-bottom: 8px; border: 1px solid #eee; }
+  .items-table td { padding: 4px 0; display: flex; align-items: center; gap: 8px; min-height: 32px; }
+  .items-table td::before { content: attr(data-label); font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; min-width: 55px; flex-shrink: 0; }
+  .items-table td:last-child { justify-content: flex-end; border-top: 1px solid #eee; margin-top: 4px; padding-top: 8px; }
+  .items-table td input { width: auto; flex: 1; }
+  .items-table .item-total { text-align: left !important; }
   #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
@@ -328,11 +328,11 @@ function addItem(desc, qty, price) {
   tr.className = 'item-row';
   tr.dataset.id = id;
   tr.innerHTML = `
-    <td><input type="text" class="item-desc" placeholder="Opis stavke..." value="${desc || ''}"></td>
-    <td><input type="number" class="item-qty" value="${qty || 1}" min="0" step="0.01" oninput="updatePreview()"></td>
-    <td><input type="number" class="item-price" value="${price || 0}" min="0" step="0.01" oninput="updatePreview()"></td>
-    <td><span class="item-total">0,00</span></td>
-    <td><button class="btn-remove" onclick="removeItem(this)">✕</button></td>
+    <td data-label="Opis"><input type="text" class="item-desc" placeholder="Opis stavke..." value="${desc || ''}"></td>
+    <td data-label="Količ."><input type="number" class="item-qty" value="${qty || 1}" min="0" step="0.01" oninput="updatePreview()"></td>
+    <td data-label="Cena"><input type="number" class="item-price" value="${price || 0}" min="0" step="0.01" oninput="updatePreview()"></td>
+    <td data-label="Ukupno"><span class="item-total">0,00</span></td>
+    <td data-label=""><button class="btn-remove" onclick="removeItem(this)">✕</button></td>
   `;
   container.appendChild(tr);
   updatePreview();
