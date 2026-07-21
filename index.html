@@ -129,16 +129,8 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-scroll { overflow: visible; }
-  .items-table { width: 100%; min-width: unset; table-layout: auto; }
-  .items-table thead { display: none; }
-  .items-table tbody, .items-table tr, .items-table td { display: block; }
-  .items-table tr { background: #f9fafb; border-radius: 8px; padding: 10px; margin-bottom: 8px; border: 1px solid #eee; }
-  .items-table td { padding: 4px 0; display: flex; align-items: center; gap: 8px; min-height: 32px; }
-  .items-table td::before { content: attr(data-label); font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; min-width: 55px; flex-shrink: 0; }
-  .items-table td:last-child { justify-content: flex-end; border-top: 1px solid #eee; margin-top: 4px; padding-top: 8px; }
-  .items-table td input { width: auto; flex: 1; }
-  .items-table .item-total { text-align: left !important; }
+  .items-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .items-table { width: 100%; min-width: 500px; table-layout: fixed; }
   #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
