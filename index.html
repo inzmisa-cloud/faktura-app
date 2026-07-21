@@ -120,17 +120,8 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-section .item-row.header { display: none; }
-  .items-section .item-row {
-    grid-template-columns: 1fr 80px 80px; gap: 4px; padding: 6px;
-    border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 6px; background: #fafafa;
-    position: relative; padding-right: 28px;
-  }
-  .items-section .item-row .item-desc { grid-column: 1 / -1; }
-  .items-section .item-row .item-qty { order: 1; }
-  .items-section .item-row .item-price { order: 2; }
-  .items-section .item-row .item-total { order: 3; text-align: right; font-size: 11px; align-self: center; }
-  .items-section .item-row .btn-remove { position: absolute; top: 4px; right: 2px; width: 22px; height: 22px; font-size: 12px; }
+  .items-section { overflow-x: auto; }
+  .items-section .item-row { grid-template-columns: 1fr 70px 80px 80px 60px; gap: 4px; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
   .invoice-parties { flex-direction: column; gap: 12px; }
