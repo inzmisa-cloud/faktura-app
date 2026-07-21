@@ -34,7 +34,7 @@ body {
 /* Items table */
 .items-section { margin: 16px 0; }
 .items-section .item-row { display: grid; grid-template-columns: 1fr 70px 80px 80px 60px; gap: 4px; align-items: center; margin-bottom: 4px; }
-.items-section .item-row.header { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; }
+.items-section .item-row.header { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; white-space: nowrap; }
 .items-section .item-row input { padding: 5px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
 .items-section .item-row .btn-remove { background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
 .items-section .item-row .btn-remove:hover { background: #fecaca; }
@@ -86,7 +86,7 @@ body {
 .invoice-meta span strong { display: inline-block; min-width: 80px; }
 
 .invoice-items { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; }
-.invoice-items th { background: #1a1a2e; color: #fff; padding: 5px 6px; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: .5px; }
+.invoice-items th { background: #1a1a2e; color: #fff; padding: 5px 6px; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
 .invoice-items th:nth-child(2), .invoice-items th:nth-child(3), .invoice-items th:nth-child(4), .invoice-items th:nth-child(5) { text-align: right; }
 .invoice-items td { padding: 4px 6px; border-bottom: 1px solid #ddd; font-size: 10pt; word-break: break-word; }
 .invoice-items td:nth-child(2), .invoice-items td:nth-child(3), .invoice-items td:nth-child(4), .invoice-items td:nth-child(5) { text-align: right; }
@@ -121,10 +121,7 @@ body {
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
   .items-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  #items-container { min-width: 440px; }
-  .items-section .item-row { grid-template-columns: 1fr 80px 85px 75px 65px; gap: 2px; }
-  .items-section .item-row.header span { white-space: nowrap; }
-  #invoice-preview .invoice-items th { white-space: nowrap; font-size: 7pt; padding: 3px 4px; }
+  #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
   .invoice-parties { flex-direction: column; gap: 12px; }
