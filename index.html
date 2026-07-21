@@ -120,8 +120,9 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-section { overflow-x: auto; }
-  .items-section .item-row { grid-template-columns: 1fr 70px 80px 80px 60px; gap: 4px; }
+  .items-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .items-section .item-row { grid-template-columns: 1fr 80px 85px 75px 65px; gap: 2px; }
+  .items-section .item-row.header span { white-space: nowrap; font-size: 9px; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
   .invoice-parties { flex-direction: column; gap: 12px; }
