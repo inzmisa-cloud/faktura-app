@@ -33,6 +33,7 @@ body {
 
 /* Items table */
 .items-section { margin: 16px 0; }
+.items-scroll { overflow: visible; }
 .items-section .item-row { display: grid; grid-template-columns: 1fr 70px 80px 80px 60px; gap: 4px; align-items: center; margin-bottom: 4px; }
 .items-section .item-row.header { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; white-space: nowrap; }
 .items-section .item-row input { padding: 5px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
@@ -120,7 +121,8 @@ body {
 }
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
-  .items-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .items-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .items-scroll #items-container { min-width: 500px; }
   #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
@@ -256,7 +258,7 @@ body {
         <span>Ukupno</span>
         <span></span>
       </div>
-      <div id="items-container"></div>
+      <div class="items-scroll"><div id="items-container"></div></div>
       <button class="btn-add-item" onclick="addItem()">+ Dodaj stavku</button>
       <div class="totals">
         <div>Osnovica: <strong id="preview-base">0,00</strong></div>
