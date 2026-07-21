@@ -122,7 +122,7 @@ body {
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
   .items-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .items-scroll #items-container { min-width: 500px; }
+  .items-scroll > * { min-width: 520px; }
   #invoice-preview { overflow: visible; }
   .invoice-header { flex-direction: column; }
   .invoice-title { text-align: left; margin-top: 8px; }
@@ -251,14 +251,16 @@ body {
     <!-- Items -->
     <div class="form-section items-section" id="items-section">
       <h3>Stavke</h3>
-      <div class="item-row header">
-        <span>Opis</span>
-        <span>Količ.</span>
-        <span>Cena</span>
-        <span>Ukupno</span>
-        <span></span>
+      <div class="items-scroll">
+        <div class="item-row header">
+          <span>Opis</span>
+          <span>Količ.</span>
+          <span>Cena</span>
+          <span>Ukupno</span>
+          <span></span>
+        </div>
+        <div id="items-container"></div>
       </div>
-      <div class="items-scroll"><div id="items-container"></div></div>
       <button class="btn-add-item" onclick="addItem()">+ Dodaj stavku</button>
       <div class="totals">
         <div>Osnovica: <strong id="preview-base">0,00</strong></div>
