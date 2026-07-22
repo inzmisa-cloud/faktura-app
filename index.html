@@ -96,9 +96,9 @@ body {
 
 .invoice-items { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; }
 .invoice-items th { background: #1a1a2e; color: #fff; padding: 5px 6px; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
-.invoice-items th:nth-child(2), .invoice-items th:nth-child(3), .invoice-items th:nth-child(4), .invoice-items th:nth-child(5) { text-align: right; }
+.invoice-items th:nth-child(2), .invoice-items th:nth-child(3), .invoice-items th:nth-child(4) { text-align: right; }
 .invoice-items td { padding: 4px 6px; border-bottom: 1px solid #ddd; font-size: 10pt; word-break: break-word; }
-.invoice-items td:nth-child(2), .invoice-items td:nth-child(3), .invoice-items td:nth-child(4), .invoice-items td:nth-child(5) { text-align: right; }
+.invoice-items td:nth-child(2), .invoice-items td:nth-child(3), .invoice-items td:nth-child(4) { text-align: right; }
 .invoice-items tbody tr:nth-child(even) { background: #f9fafb; }
 
 .invoice-totals { margin-left: auto; width: 50%; }
@@ -250,14 +250,6 @@ body {
             <option value="Ček">Ček</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Poreska stopa</label>
-          <select id="inv-tax-rate">
-            <option value="0">0% (oslobođen)</option>
-            <option value="10">10%</option>
-            <option value="20" selected>20% (opšta)</option>
-          </select>
-        </div>
       </div>
     </div>
 
@@ -281,7 +273,6 @@ body {
       <button class="btn-add-item" onclick="addItem()">+ Dodaj stavku</button>
       <div class="totals">
         <div>Osnovica: <strong id="preview-base">0,00</strong></div>
-        <div>PDV: <strong id="preview-tax">0,00</strong></div>
         <div class="grand-total">Ukupno: <strong id="preview-total">0,00</strong></div>
       </div>
     </div>
@@ -356,11 +347,8 @@ function updatePreview() {
     row.querySelector('.item-total').textContent = formatNum(total);
     base += total;
   });
-  const taxRate = parseInt(document.getElementById('inv-tax-rate').value) || 0;
-  const tax = base * taxRate / 100;
-  const grandTotal = base + tax;
+  const grandTotal = base;
   document.getElementById('preview-base').textContent = formatNum(base);
-  document.getElementById('preview-tax').textContent = formatNum(tax);
   document.getElementById('preview-total').textContent = formatNum(grandTotal);
   renderInvoice();
 }
@@ -370,7 +358,6 @@ function renderInvoice() {
   const buyer = n => document.getElementById('buyer-' + n).value;
   const val = n => document.getElementById('inv-' + n).value;
   const currency = val('currency');
-  const taxRate = parseInt(document.getElementById('inv-tax-rate').value) || 0;
   const notes = document.getElementById('inv-notes').value;
 
   let base = 0, itemsHtml = '';
@@ -381,11 +368,10 @@ function renderInvoice() {
     const total = qty * price;
     base += total;
     if (desc) {
-      itemsHtml += `<tr><td>${desc}</td><td>${formatNum(qty)}</td><td>${formatNum(price)}</td><td>${taxRate}%</td><td>${formatNum(total)}</td></tr>`;
+      itemsHtml += `<tr><td>${desc}</td><td>${formatNum(qty)}</td><td>${formatNum(price)}</td><td>${formatNum(total)}</td></tr>`;
     }
   });
-  const tax = base * taxRate / 100;
-  const grandTotal = base + tax;
+  const grandTotal = base;
 
   document.getElementById('invoice-preview').innerHTML = `
     <div class="invoice-header">
@@ -429,19 +415,17 @@ function renderInvoice() {
 
     <table class="invoice-items">
       <thead><tr>
-        <th style="width:45%">Opis</th>
-        <th style="width:10%">Količina</th>
-        <th style="width:13%">Cena</th>
-        <th style="width:10%">PDV</th>
-        <th style="width:12%">Iznos</th>
+        <th style="width:50%">Opis</th>
+        <th style="width:15%">Količina</th>
+        <th style="width:17%">Cena</th>
+        <th style="width:18%">Iznos</th>
       </tr></thead>
-      <tbody>${itemsHtml || '<tr><td colspan="5" style="text-align:center;color:#999;">— nema stavki —</td></tr>'}</tbody>
+      <tbody>${itemsHtml || '<tr><td colspan="4" style="text-align:center;color:#999;">— nema stavki —</td></tr>'}</tbody>
     </table>
 
     <div class="invoice-totals">
       <table>
         <tr><td>Osnovica:</td><td>${formatNum(base)} ${currency}</td></tr>
-        <tr><td>PDV (${taxRate}%):</td><td>${formatNum(tax)} ${currency}</td></tr>
         <tr class="total-row"><td>Ukupno za plaćanje:</td><td>${formatNum(grandTotal)} ${currency}</td></tr>
       </table>
     </div>
@@ -458,7 +442,6 @@ function buildInlineHTML() {
   const buyer = n => document.getElementById('buyer-' + n).value;
   const val = n => document.getElementById('inv-' + n).value;
   const currency = val('currency');
-  const taxRate = parseInt(document.getElementById('inv-tax-rate').value) || 0;
   const notes = document.getElementById('inv-notes').value;
 
   let base = 0, itemsRows = '';
@@ -473,13 +456,11 @@ function buildInlineHTML() {
         <td style="padding:3pt 4pt;border-bottom:0.5pt solid #ccc;font-size:10pt;word-break:break-word">${desc}</td>
         <td style="padding:3pt 4pt;border-bottom:0.5pt solid #ccc;font-size:10pt;text-align:right">${fmt(qty)}</td>
         <td style="padding:3pt 4pt;border-bottom:0.5pt solid #ccc;font-size:10pt;text-align:right">${fmt(price)}</td>
-        <td style="padding:3pt 4pt;border-bottom:0.5pt solid #ccc;font-size:10pt;text-align:right">${taxRate}%</td>
         <td style="padding:3pt 4pt;border-bottom:0.5pt solid #ccc;font-size:10pt;text-align:right">${fmt(total)}</td>
       </tr>`;
     }
   });
-  const tax = base * taxRate / 100;
-  const grandTotal = base + tax;
+  const grandTotal = base;
 
   function fmt(v) { return Number(v).toLocaleString('sr-RS', {minimumFractionDigits:2, maximumFractionDigits:2}); }
   function escHtml(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
@@ -540,21 +521,19 @@ function buildInlineHTML() {
 <!-- ITEMS TABLE -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12pt">
 <thead><tr>
-  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:left;width:45%">Opis</th>
-  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:right;width:12%">Količina</th>
-  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:right;width:15%">Cena</th>
-  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:right;width:10%">PDV</th>
+  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:left;width:50%">Opis</th>
+  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:right;width:15%">Količina</th>
+  <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:right;width:17%">Cena</th>
   <th style="background:#1a1a2e;color:#fff;padding:4pt 5pt;font-size:8pt;text-transform:uppercase;letter-spacing:0.5pt;text-align:right;width:18%">Iznos</th>
 </tr></thead>
 <tbody>
-${itemsRows || '<tr><td colspan="5" style="padding:8pt;text-align:center;color:#999;font-size:10pt">— nema stavki —</td></tr>'}
+${itemsRows || '<tr><td colspan="4" style="padding:8pt;text-align:center;color:#999;font-size:10pt">— nema stavki —</td></tr>'}
 </tbody>
 </table>
 
 <!-- TOTALS -->
 <table width="50%" cellpadding="0" cellspacing="0" align="right" style="margin-bottom:12pt">
 <tr><td style="padding:2pt 4pt;font-size:10pt">Osnovica:</td><td style="padding:2pt 4pt;font-size:10pt;text-align:right">${fmt(base)} ${escHtml(currency)}</td></tr>
-<tr><td style="padding:2pt 4pt;font-size:10pt">PDV (${taxRate}%):</td><td style="padding:2pt 4pt;font-size:10pt;text-align:right">${fmt(tax)} ${escHtml(currency)}</td></tr>
 <tr><td style="padding:3pt 4pt;font-size:13pt;font-weight:700;border-top:2pt solid #000">Ukupno za pla&cacute;anje:</td>
     <td style="padding:3pt 4pt;font-size:13pt;font-weight:700;border-top:2pt solid #000;text-align:right">${fmt(grandTotal)} ${escHtml(currency)}</td></tr>
 </table>
